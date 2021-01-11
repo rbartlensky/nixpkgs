@@ -81,7 +81,6 @@ let
   # The `.nativeDrv` stanza works like nativeBuildInputs and ensures cross-compiling has the right version available.
   diff = "${diffutils.nativeDrv or diffutils}/bin/diff";
 
-  userPostPatch = args.postPatch or "";
 in
 
 stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
@@ -130,7 +129,7 @@ stdenv.mkDerivation ((removeAttrs args ["depsExtraArgs"]) // {
   # src package. Note that we do this after the patchPhase, because the
   # patchPhase may create the Cargo.lock if upstream has not shipped one.
   postPatch = stdenv.lib.optionalString validateCargoDeps ''
-    ${userPostPatch}
+    ${args.postPatch or ""}
     cargoDepsLockfile=$NIX_BUILD_TOP/$cargoDepsCopy/Cargo.lock
     srcLockfile=$NIX_BUILD_TOP/$sourceRoot/Cargo.lock
 
